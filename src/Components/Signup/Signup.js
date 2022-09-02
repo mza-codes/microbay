@@ -1,58 +1,106 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { FirebaseContext } from '../../Contexts/FirebaseContext';
 
 import Logo from '../../olx-logo.png';
 import './Signup.css';
 
+
+
 export default function Signup() {
+  const route = useHistory()
+  const [username, setUserName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [password, setPassword] = useState('')
+  const { FirebaseInit } = useContext(FirebaseContext)
+  const [loader, setLoader] = useState(false)
+  function disable() {
+    document.getElementById('submit').hidden = true
+  }
+  function enable() {
+    document.getElementById('submit').hidden = false
+  }
+  const handleSignup = (e) => {
+    e.preventDefault()
+    document.getElementById('loading').classList.add('loader')
+    console.log(username, email, password)
+    console.log(FirebaseInit)
+    FirebaseInit.auth().createUserWithEmailAndPassword(email, password).then((result) => {
+      console.log('logging result');
+      console.log(result.user)
+      result.user.updateProfile({ displayName: username }).then(() => {
+        FirebaseInit.firestore().collection('webusers').add({
+          id: result.user.uid,
+          username: username,
+          email,
+          phone
+        }).then(() => {
+          route.push('/login')
+          alert('success');
+        })
+      }).catch((err) => console.log(err))
+
+    }).catch((err) => { alert(err.message ? err.message : err.code); console.log('ERROR OCCURED'); console.log(err) })
+  }
   return (
     <div>
       <div className="signupParentDiv">
         <img width="200px" height="200px" src={Logo}></img>
-        <form>
+        <form onSubmit={handleSignup} >
           <label htmlFor="fname">Username</label>
           <br />
-          <input
+          <input required
             className="input"
             type="text"
+            onChange={(e) => { setUserName(e.target.value); enable() }}
+            value={username}
             id="fname"
             name="name"
-            defaultValue="John"
+            placeholder="John"
           />
           <br />
-          <label htmlFor="fname">Email</label>
+          <label htmlFor="email">Email</label>
           <br />
-          <input
+          <input required
             className="input"
             type="email"
-            id="fname"
+            onChange={(e) => { setEmail(e.target.value); enable() }}
+            value={email}
+            id="email"
             name="email"
-            defaultValue="John"
+            placeholder="John"
           />
           <br />
-          <label htmlFor="lname">Phone</label>
+          <label htmlFor="phone">Phone</label>
           <br />
-          <input
+          <input required
             className="input"
             type="number"
-            id="lname"
+            onChange={(e) => { setPhone(e.target.value); enable(false) }}
+            value={phone}
+            id="phone"
             name="phone"
-            defaultValue="Doe"
+            placeholder="Doe"
           />
           <br />
-          <label htmlFor="lname">Password</label>
+          <label htmlFor="password">Password</label>
           <br />
-          <input
+          <input required
             className="input"
             type="password"
-            id="lname"
+            onChange={(e) => { setPassword(e.target.value); enable() }}
+            value={password}
+            id="password"
             name="password"
-            defaultValue="Doe"
+            placeholder="Doe*/46"
           />
           <br />
           <br />
-          <button>Signup</button>
+          <button id='submit' onClick={disable} >Signup</button>
+          <div id='loading' className=" m-2 p-2 mx-auto"></div>
         </form>
-        <a>Login</a>
+        <Link to='/login' >Login</Link>
       </div>
     </div>
   );

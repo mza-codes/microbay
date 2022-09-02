@@ -1,0 +1,21 @@
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.times {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.loader {
+    display: flex;
+    /* text-align: center; */
+    /* margin: auto; */
+    border: 5px solid black;
+    border-radius: 50%;
+    border-top: 5px solid white;
+    width: 20px;
+    height: 20px;
+    -webkit-animation: spin 1s linear infinite;
+    /* Safari */
+    animation: spin 1s linear infinite;
+}
