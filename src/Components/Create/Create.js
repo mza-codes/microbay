@@ -3,7 +3,7 @@ import './Create.css';
 import Header from '../Header/Header';
 import { AuthContext, FirebaseContext } from '../../Contexts/FirebaseContext';
 import { useHistory } from 'react-router-dom';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Select } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 const Create = () => {
@@ -14,6 +14,7 @@ const Create = () => {
   const [price, setPrice] = useState('')
   const { FirebaseInit } = useContext(FirebaseContext)
   const { user } = useContext(AuthContext)
+  const [loading,setLoading] = useState(false)
   function disable() {
     document.getElementById('submit').hidden = true
   }
@@ -22,6 +23,9 @@ const Create = () => {
   }
   function productSubmit(e) {
     // console.log(e)
+    console.log('logging data');
+    console.log(name,category,price);
+    console.log(image)
     e.preventDefault()
     document.getElementById('loading').classList.add('loader') // used old method to test  
     FirebaseInit.storage().ref(`/productImages/${name + image.name}`).put(image).then((result) => {
@@ -59,7 +63,47 @@ const Create = () => {
             placeholder="Name & Model Number"
           />
           <br />
-          <label className="label">Category</label>
+
+          <div>
+            {/* <Select
+              id="Select-42"
+              multiple={false}
+              onChange={(e) => { setCategory(e.target.value);console.log(category); enable() }}
+              options={{
+                classes: '',
+                dropdownOptions: {
+                  alignment: 'left',
+                  autoTrigger: true,
+                  closeOnClick: true,
+                  constrainWidth: true,
+                  coverTrigger: true,
+                  hover: false,
+                  inDuration: 150,
+                  onCloseEnd: null,
+                  onCloseStart: null,
+                  onOpenEnd: null,
+                  onOpenStart: null,
+                  outDuration: 250
+                }
+              }}
+              defaultValue=''
+            > */}
+            <select name="category" onChange={(e) => { setCategory(e.target.value);console.log(category); enable() }}  id="">
+              <option disabled >Choose your option </option>
+              <option value="Electronics">Electronics</option>
+              <option value="Gadgets">Gadgets</option>
+              <option value="Buildings">Buildings </option>
+              <option value="Property">Property</option>
+              <option value="Bikes"> Bikes </option>
+              <option value="Cars"> Cars </option>
+              <option value="Laptop"> Laptop </option>
+              <option value="Cycles"> Cycles </option>
+              <option value="Other"> Other </option>
+              {/* </Select> */}
+            </select>
+          </div>
+
+          {/* <label className="label">Category</label>
           <br />
           <input
             required
@@ -69,7 +113,7 @@ const Create = () => {
             value={category}
             name="category"
             placeholder="Building/Vehicle/Electronics"
-          />
+          /> */}
           <br />
           <label className="label">Price</label>
           <br />
@@ -81,10 +125,10 @@ const Create = () => {
           {/* material ui test start */}
           <Button variant="contained" component="label">
             Upload
-            <input required hidden onChange={(e) => { setImage(e.target.files[0]); enable() }} accept="image/*" multiple type="file" />
+            <input required hidden onChange={(e) => { setImage(e.target.files[0]); enable() }}  multiple type="file" />
           </Button>
           <IconButton color="primary" aria-label="upload picture" component="label">
-            <input required hidden onChange={(e) => { setImage(e.target.files[0]); enable() }} accept="image/*" type="file" />
+            <input required hidden onChange={(e) => { setImage(e.target.files[0]); enable() }}  type="file" />
             <PhotoCamera />
           </IconButton>
           {/* material ui test close */}
@@ -94,7 +138,7 @@ const Create = () => {
             {/* <br />
             <input required type="file" name='image' onChange={(e) => { setImage(e.target.files[0]); enable() }} />
             <br /> */}
-            <button type='submit' id='submit' onClick={disable} className="uploadBtn">Upload and Submit</button>
+            <button type='submit' id='submit' onClick={(e)=>{productSubmit(e);disable()}} className="uploadBtn">Upload and Submit</button>
             <div id='loading' className=" m-2 p-2 mx-auto"></div>
           </div>
         </form>

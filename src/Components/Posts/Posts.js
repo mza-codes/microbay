@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Heart from '../../assets/Heart';
@@ -10,6 +10,7 @@ function Posts() {
   const [products, setProducts] = useState([])
   const { FirebaseInit } = useContext(FirebaseContext)
   const { setPostDetails } = useContext(PostContext)
+  const ref = useRef(null);
   const route = useHistory()
   useEffect(() => {
     FirebaseInit.firestore().collection('products').get().then((snapshot) => {
@@ -22,13 +23,15 @@ function Posts() {
       setProducts(allProducts)
     })
   }, [])
-
+  const scroll = (scrollOffset) => {
+    ref.current.scrollLeft += scrollOffset;
+  };
   return (
     <div className="postParentDiv">
       <div className="moreView">
         <div className="heading">
-          <span>Quick Menu</span>
-          <span>View more</span>
+          <span>Latest Updates</span>
+          <span>View more &gt;</span>
         </div>
         <div className="cards">
           {products.map((product, i) => {

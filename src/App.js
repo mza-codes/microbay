@@ -12,6 +12,8 @@ import Home from './Pages/Home';
 import { AuthContext, FirebaseContext } from './Contexts/FirebaseContext';
 import Post from './Contexts/PostContext';
 import View from './Pages/ViewPost'
+import Result, { SearchResult } from './Contexts/ResultContext';
+import ViewResult from './Pages/SearchResult';
 
 function App() {
   const { user, setUser } = useContext(AuthContext)
@@ -25,26 +27,30 @@ function App() {
   return (
     <div>
       <Post>
-        <Router>
-          <Route exact path='/' >
-            <Home />
-          </Route>
-          <Route path='/signup' >
-            {user ? <Home /> : <Signup />}
-          </Route>
-          <Route path='/login' >
-            {user ? <Home /> : <Login />}
-          </Route>
-          <Route path='/create' >
-            {user ? <Create /> : <Login />}
-          </Route>
-          <Route path='/view' >
-            {/* {user ? <Create /> : <Login />} */}
-            <View />
-          </Route>
-        </Router>
-      </Post>
-    </div>
+        <Result>
+          <Router>
+            <Route exact path='/' >
+              <Home />
+            </Route>
+            <Route path='/signup' >
+              {user ? <Home /> : <Signup />}
+            </Route>
+            <Route path='/login' >
+              {user ? <Home /> : <Login />}
+            </Route>
+            <Route path='/create' >
+              {user ? <Create /> : <Login />}
+            </Route>
+            <Route path='/view' >
+              <View />
+            </Route>
+            <Route path='/results' >
+              <ViewResult />
+            </Route>
+          </Router>
+        </Result>
+      </Post >
+    </div >
   );
 }
 
