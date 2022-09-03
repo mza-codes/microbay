@@ -2,16 +2,40 @@
   padding-top: 4em;
   display: flex;
 }
+
 .viewParentDiv .imageShowDiv {
   padding: 16px;
   width: 70vw;
 }
+
 .viewParentDiv .imageShowDiv img {
   /* width: 65vw; */
   display: flex;
   height: 85vh;
 }
 
+.w-100 {
+  margin-top: 10vh;
+  /* height: 80%; */
+  height: inherit;
+  /* width: 80% !important; */
+  width: inherit;
+  /* display: flex;
+  flex-direction: row;
+  align-items: center; */
+}
+
+@media only screen and (max-width: 768px) {
+  .w100 {
+    display: none !important;
+  }
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
 
 .viewParentDiv .rightSection {
   padding: 16px;

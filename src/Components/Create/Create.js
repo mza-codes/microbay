@@ -3,6 +3,8 @@ import './Create.css';
 import Header from '../Header/Header';
 import { AuthContext, FirebaseContext } from '../../Contexts/FirebaseContext';
 import { useHistory } from 'react-router-dom';
+import { Button, IconButton } from '@mui/material';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 const Create = () => {
   const route = useHistory()
@@ -51,7 +53,7 @@ const Create = () => {
             required
             className="input"
             type="text"
-            onChange={(e) => {setItemName(e.target.value);enable()}}
+            onChange={(e) => { setItemName(e.target.value); enable() }}
             value={name}
             name="Name"
             placeholder="Name & Model Number"
@@ -63,7 +65,7 @@ const Create = () => {
             required
             className="input"
             type="text"
-            onChange={(e) => {setCategory(e.target.value);enable()}}
+            onChange={(e) => { setCategory(e.target.value); enable() }}
             value={category}
             name="category"
             placeholder="Building/Vehicle/Electronics"
@@ -71,15 +73,27 @@ const Create = () => {
           <br />
           <label className="label">Price</label>
           <br />
-          <input onChange={(e) => {setPrice(e.target.value);enable()}}
+          <input onChange={(e) => { setPrice(e.target.value); enable() }}
             value={price} required className="input" type="number" name="price" placeholder="Price in Your Currency" />
           <br />
           <br />
-          <div className="flex text-center">
-            <img alt="Uploaded Image" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>
-            <br />
-            <input required type="file" name='image' onChange={(e) => { setImage(e.target.files[0]);enable() }} />
-            <br />
+
+          {/* material ui test start */}
+          <Button variant="contained" component="label">
+            Upload
+            <input required hidden onChange={(e) => { setImage(e.target.files[0]); enable() }} accept="image/*" multiple type="file" />
+          </Button>
+          <IconButton color="primary" aria-label="upload picture" component="label">
+            <input required hidden onChange={(e) => { setImage(e.target.files[0]); enable() }} accept="image/*" type="file" />
+            <PhotoCamera />
+          </IconButton>
+          {/* material ui test close */}
+
+          <div className="mt-3 flex text-center">
+            <img className='viewImg' alt="Uploaded Image" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>
+            {/* <br />
+            <input required type="file" name='image' onChange={(e) => { setImage(e.target.files[0]); enable() }} />
+            <br /> */}
             <button type='submit' id='submit' onClick={disable} className="uploadBtn">Upload and Submit</button>
             <div id='loading' className=" m-2 p-2 mx-auto"></div>
           </div>

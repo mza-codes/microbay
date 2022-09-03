@@ -1,67 +1,70 @@
+// import { LoadingButton } from '@mui/lab';
+import { Button, TextField } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AuthContext, FirebaseContext } from '../../Contexts/FirebaseContext';
+import { FirebaseContext } from '../../Contexts/FirebaseContext';
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
 
 import Logo from '../../olx-logo.png';
 import './Login.css';
-
 function Login() {
   // const {setUser} = useContext(AuthContext)
-  const {FirebaseInit} = useContext(FirebaseContext)
-  // useEffect(()=>{
-  //   FirebaseInit.onAuthStateChanged((user)=>{
-  //     setUser(user)
-  //     console.log('USERS SET COMPLETE');
-  //   })
-  // })
+  const { FirebaseInit } = useContext(FirebaseContext)
+  const [loading, setLoading] = useState(false);
   const route = useHistory()
-  const [email,setEmail] = useState('')
-  const [password,setPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [pwdLength, setPwdLength] = useState(false)
   // const {FirebaseInit} = useContext(FirebaseContext)
-  const handleLogin =(e)=>{
+  const handleLogin = (e) => {
     e.preventDefault()
-    FirebaseInit.auth().signInWithEmailAndPassword(email,password).then((result)=>{
-      console.log('logging user after login');
-      console.log(result.user);
-      // setUser(result.user)
-      route.push('/')
-    }).catch((err)=>alert(err.message))
+    if (password.length >= 5) {
+      setPwdLength(false)
+      FirebaseInit.auth().signInWithEmailAndPassword(email, password).then((result) => {
+        // setUser(result.user)
+        route.push('/')
+      }).catch((err) => { setLoading(false); alert(err.message) })
+    } else {
+      setPwdLength(true)
+      setLoading(false)
+    }
   }
   return (
     <div>
-      <div className="loginParentDiv">
-        <img width="200px" height="200px" src={Logo}></img>
-        <form onSubmit={handleLogin}>
-          <label htmlFor="fname">Email</label>
-          <br />
-          <input
-            className="input"
-            type="email"
-            onChange={(e)=>{setEmail(e.target.value)}}
-            value={email}
-            name="email"
-            placeholder="John"
-          />
-          <br />
-          <label htmlFor="lname">Password</label>
-          <br />
-          <input
-            className="input"
-            type="password"
-            onChange={(e)=>{setPassword(e.target.value)}}
-            value={password}
-            name="password"
-            placeholder="Doe"
-          />
-          <br />
-          <br />
-          <button>Login</button>
-        </form>
-        <a onClick={()=>{route.push('/signup')}} >Signup</a>
-        <a onClick={()=>{route.push('/')}} >Home</a>
+      <div className="container">
+        <h1 className='text-center p-3 m-3 times '>Login</h1>
+        <hr />
+        <div className='row mt-3 login'>
+          <img width="300px" height="300px" src={Logo}></img>
+          <TextField required onChange={(e) => { setEmail(e.target.value); setLoading(false) }}
+            type="email" value={email}
+            label="Email" color="secondary" variant="filled" focused />
+          <TextField required onChange={(e) => { setPassword(e.target.value); setLoading(false) }}
+            type="password" value={password}
+            label="Password" variant="filled" color="warning" focused />
+          {pwdLength && <p id='pwdLength' className='times' style={{ color: 'red', fontSize: '15px' }} >
+            *Password must be more than 5 Characters Long </p>}
+          <div>
+            {/* <Box sx={{ '& > button': { m: 1 } }}> */}
+            <LoadingButton
+              color="secondary"
+              onClick={(e) => { setLoading(true); handleLogin(e) }}
+              loading={loading}
+              loadingPosition="end"
+              endIcon={<SendIcon />}
+              variant="contained">
+              Login
+            </LoadingButton>
+            <br />
+            
+            {/* </Box> */}
+          </div>
+          <Button onClick={()=>route.push('/signup')} color='warning' variant="contained" component="label">Sign Up</Button>
+        </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default Login;
