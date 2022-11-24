@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import './Header.css';
+// import './Header.css';
 import OlxLogo from '../../assets/OlxLogo';
 import Search from '../../assets/Search';
 import Arrow from '../../assets/Arrow';
@@ -64,9 +64,10 @@ function Header() {
   let create = '/login'
   user ? create = '/create' : create = '/login'
   return (
-    <div className="headerParentDiv">
+    <header className='container-fluid'>
+    <div className="row headerParentDiv">
       <div className="headerChildDiv">
-        <div onClick={() => route.push('/')} className="brandName">
+        <div onClick={() => route.push('/')} className="pointer brandName">
           <OlxLogo ></OlxLogo>
         </div>
         <div className="placeSearch">
@@ -114,6 +115,7 @@ function Header() {
         </div>
       </div>
     </div>
+    </header>
   );
 }
 
